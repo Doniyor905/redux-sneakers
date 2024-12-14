@@ -1,20 +1,20 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { addToCart, removeCart } from '../redux/slices/cartSlice';
+import { addToFavorites, deleteFavorite } from '../redux/slices/favoriteSlice';
+
 import addIcon from '../assets/images/add.svg';
 import addedIcon from '../assets/images/added.svg';
 import likeIcon from '../assets/images/like.svg';
 import likedIcon from '../assets/images/liked.svg';
 
-import { addToCart, removeCart, setAddItems } from '../redux/slices/cartSlice';
-import { setFavoriteItems } from '../redux/slices/favoriteSlice';
-
-const Card = ({ id, title, price, imageUrl, isAdded }) => {
+const Card = ({ id, title, price, imageUrl }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const favoriteItems = useSelector((state) => state.favorite.favoriteItems);
 
   const isAddeda = cartItems.some((item) => item.title === title);
-  const isLiked = favoriteItems.some((item) => item.id === id);
+  const isLiked = favoriteItems.some((item) => item.title === title);
 
   const toggleCart = () => {
     const items = {
@@ -32,14 +32,19 @@ const Card = ({ id, title, price, imageUrl, isAdded }) => {
     }
   };
 
-  const onClickFavorite = () => {
+  const onClickFavorite = (id) => {
     const items = {
       id,
       title,
       price,
       imageUrl,
     };
-    dispatch(setFavoriteItems(items));
+    const findFavorite = favoriteItems.find((item) => item.title === title);
+    if (findFavorite) {
+      dispatch(deleteFavorite(findFavorite.id));
+    } else {
+      dispatch(addToFavorites(items));
+    }
   };
   return (
     <div className="justify-center mx-auto">

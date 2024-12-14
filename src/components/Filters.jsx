@@ -2,14 +2,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import Title from './Title';
 import { Search } from 'lucide-react';
 import { setSearchCard, setSortBy } from '../redux/slices/filtersSlice';
+import debounce from 'lodash.debounce';
+import React from 'react';
 const sortList = [
   { name: 'По названию', value: '' },
   { name: 'По цене (дешевые)', value: '-price' },
   { name: 'По цене (дорогие)', value: 'price' },
 ];
 const Filters = () => {
+  const [value, setValue] = React.useState('');
   const dispatch = useDispatch();
-  const searchCard = useSelector((state) => state.filter.searchCard);
+
+  const updateSearch = React.useCallback(
+    debounce((str) => {
+      dispatch(setSearchCard(str));
+    }, 250),
+    [],
+  );
+
+  const onChangeSearch = (event) => {
+    setValue(event.target.value);
+    updateSearch(event.target.value);
+  };
 
   return (
     <div className="flex items-center justify-between flex-col lg:flex-row">
@@ -27,8 +41,8 @@ const Filters = () => {
         <div className=" flex items-center gap-2 pl-2 pr-2 border-2 border-[#F3F3F3] rounded-xl  w-[250px] h-[45px]">
           <Search className="text-lightGray w-[20px]" />
           <input
-            value={searchCard}
-            onChange={(e) => dispatch(setSearchCard(e.target.value))}
+            value={value}
+            onChange={(e) => onChangeSearch(e)}
             className="w-full focus:outline-none  text-gray"
             type="text"
             placeholder="Поиск..."

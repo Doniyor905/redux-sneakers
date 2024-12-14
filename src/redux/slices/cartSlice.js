@@ -1,6 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+const loadStateFromLocalStorage = () => {
+  const storedCartItems = localStorage.getItem('cartItems');
+  const storedTotalPrice = localStorage.getItem('totalPrice');
+  return {
+    cartItems: storedCartItems ? JSON.parse(storedCartItems) : [],
+    totalPrice: storedTotalPrice ? parseFloat(storedTotalPrice) : 0,
+  };
+};
 
+// Сохраняем данные в localStorage
+const saveStateToLocalStorage = (state) => {
+  localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+  localStorage.setItem('totalPrice', state.totalPrice.toString());
+};
 export const addToCart = createAsyncThunk(
   'cart/addToCart',
   async (product, { rejectWithValue }) => {
@@ -36,10 +49,7 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { rejectWi
 
 const cartSlices = createSlice({
   name: 'cart',
-  initialState: {
-    cartItems: [],
-    totalPrice: 0,
-  },
+  initialState: loadStateFromLocalStorage(),
 
   reducers: {
     // setAddItems(state, action) {
@@ -69,6 +79,7 @@ const cartSlices = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.status = 'success';
         state.cartItems = action.payload;
+        saveStateToLocalStorage(state);
       })
       .addCase(fetchCart.rejected, (state) => {
         state.status = 'error';
@@ -77,6 +88,7 @@ const cartSlices = createSlice({
         state.status = 'success';
         state.cartItems.push(action.payload);
         state.totalPrice += action.payload.price;
+        saveStateToLocalStorage(state);
       })
       .addCase(removeCart.fulfilled, (state, action) => {
         state.status = 'success';
@@ -85,6 +97,7 @@ const cartSlices = createSlice({
         if (findItem) {
           state.totalPrice -= findItem.price;
         }
+        saveStateToLocalStorage(state);
       });
   },
 });
