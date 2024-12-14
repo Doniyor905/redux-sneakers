@@ -1,9 +1,9 @@
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import closeIcon from '../assets/images/closeIcon.svg';
 import { ArrowRight } from 'lucide-react';
-import { fetchCart, removeCart, setRemoveItem } from '../redux/slices/cartSlice';
-import CartEmpty from './cartEmpty';
-import React from 'react';
+import {  removeCart } from '../redux/slices/cartSlice';
+import CartEmpty from './СartEmpty';
 const Drawer = ({ setOpenDrawer }) => {
   const addItems = useSelector((state) => state.cart.cartItems);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
