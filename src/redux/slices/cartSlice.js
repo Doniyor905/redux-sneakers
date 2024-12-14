@@ -1,8 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+
+const getUserId = () => {
+  // Здесь можно получить id пользователя (например, из state или токена)
+  return 'uniqueUserId'; // Замените на реальный способ получения userId
+};
+
 const loadStateFromLocalStorage = () => {
-  const storedCartItems = localStorage.getItem('cartItems');
-  const storedTotalPrice = localStorage.getItem('totalPrice');
+  const userId = getUserId();
+  const storedCartItems = localStorage.getItem(`cartItems_${userId}`);
+  const storedTotalPrice = localStorage.getItem(`totalPrice_${userId}`);
   return {
     cartItems: storedCartItems ? JSON.parse(storedCartItems) : [],
     totalPrice: storedTotalPrice ? parseFloat(storedTotalPrice) : 0,
@@ -11,8 +18,10 @@ const loadStateFromLocalStorage = () => {
 
 // Сохраняем данные в localStorage
 const saveStateToLocalStorage = (state) => {
-  localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
-  localStorage.setItem('totalPrice', state.totalPrice.toString());
+  const userId = getUserId();
+
+  localStorage.setItem(`cartItems_${userId}`, JSON.stringify(state.cartItems));
+  localStorage.setItem(`totalPrice_${userId}`, state.totalPrice.toString());
 };
 export const addToCart = createAsyncThunk(
   'cart/addToCart',

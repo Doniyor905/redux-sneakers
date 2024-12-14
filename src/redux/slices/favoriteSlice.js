@@ -37,7 +37,6 @@ export const deleteFavorite = createAsyncThunk(
   },
 );
 const storedFavorites = localStorage.getItem('favoriteItems');
-console.log('Содержимое localStorage:', storedFavorites); // Для отладки
 let favoriteItems = [];
 try {
   favoriteItems = storedFavorites ? JSON.parse(storedFavorites) : [];
