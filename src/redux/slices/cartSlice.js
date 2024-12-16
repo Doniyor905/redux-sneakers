@@ -1,28 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const getUserId = () => {
-  // Здесь можно получить id пользователя (например, из state или токена)
-  return 'uniqueUserId'; // Замените на реальный способ получения userId
-};
-
-const loadStateFromLocalStorage = () => {
-  const userId = getUserId();
-  const storedCartItems = localStorage.getItem(`cartItems_${userId}`);
-  const storedTotalPrice = localStorage.getItem(`totalPrice_${userId}`);
-  return {
-    cartItems: storedCartItems ? JSON.parse(storedCartItems) : [],
-    totalPrice: storedTotalPrice ? parseFloat(storedTotalPrice) : 0,
-  };
-};
-
-// Сохраняем данные в localStorage
-const saveStateToLocalStorage = (state) => {
-  const userId = getUserId();
-
-  localStorage.setItem(`cartItems_${userId}`, JSON.stringify(state.cartItems));
-  localStorage.setItem(`totalPrice_${userId}`, state.totalPrice.toString());
-};
 export const addToCart = createAsyncThunk(
   'cart/addToCart',
   async (product, { rejectWithValue }) => {
@@ -58,7 +36,10 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { rejectWi
 
 const cartSlices = createSlice({
   name: 'cart',
-  initialState: loadStateFromLocalStorage(),
+  initialState: {
+    cartItems: [],
+    totalPrice: 0,
+  },
 
   reducers: {
     // setAddItems(state, action) {
@@ -88,7 +69,6 @@ const cartSlices = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.status = 'success';
         state.cartItems = action.payload;
-        saveStateToLocalStorage(state);
       })
       .addCase(fetchCart.rejected, (state) => {
         state.status = 'error';
@@ -97,7 +77,6 @@ const cartSlices = createSlice({
         state.status = 'success';
         state.cartItems.push(action.payload);
         state.totalPrice += action.payload.price;
-        saveStateToLocalStorage(state);
       })
       .addCase(removeCart.fulfilled, (state, action) => {
         state.status = 'success';
@@ -106,7 +85,6 @@ const cartSlices = createSlice({
         if (findItem) {
           state.totalPrice -= findItem.price;
         }
-        saveStateToLocalStorage(state);
       });
   },
 });

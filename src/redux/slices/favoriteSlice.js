@@ -36,24 +36,11 @@ export const deleteFavorite = createAsyncThunk(
     }
   },
 );
-const storedFavorites = localStorage.getItem('favoriteItems');
-let favoriteItems = [];
-try {
-  favoriteItems = storedFavorites ? JSON.parse(storedFavorites) : [];
-} catch (error) {
-  console.error('Ошибка парсинга localStorage:', error);
-  favoriteItems = [];
-}
 
-if (!Array.isArray(favoriteItems)) {
-  favoriteItems = [];
-  localStorage.setItem('favoriteItems', JSON.stringify(favoriteItems));
-}
 const favoriteSlice = createSlice({
   name: 'favorite',
-
   initialState: {
-    favoriteItems,
+    favoriteItems: [],
     status: '',
   },
   reducers: {
@@ -75,7 +62,6 @@ const favoriteSlice = createSlice({
       .addCase(fetchFavorites.fulfilled, (state, action) => {
         state.status = 'success';
         state.favoriteItems = action.payload;
-        localStorage.setItem('favoriteItems', JSON.stringify(state.favoriteItems));
       })
       .addCase(addToFavorites.pending, (state, action) => {
         state.status = 'loading';
@@ -83,7 +69,6 @@ const favoriteSlice = createSlice({
       .addCase(addToFavorites.fulfilled, (state, action) => {
         state.status = 'success';
         state.favoriteItems.push(action.payload);
-        localStorage.setItem('favoriteItems', JSON.stringify(state.favoriteItems));
       })
       .addCase(deleteFavorite.pending, (state, action) => {
         state.status = 'loading';
@@ -91,7 +76,6 @@ const favoriteSlice = createSlice({
       .addCase(deleteFavorite.fulfilled, (state, action) => {
         state.status = 'success';
         state.favoriteItems = state.favoriteItems.filter((item) => item.id !== action.payload);
-        localStorage.setItem('favoriteItems', JSON.stringify(state.favoriteItems));
       });
   },
 });
