@@ -1,6 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// type SneakersItems = {
+//   id: string;
+//   title: string;
+//   price: number;
+//   imageUrl: string;
+// };
+
+// type Items = {
+//   items: SneakersItems[];
+//   status: string;
+// };
+
+// type ParamsType = {
+//   search: string;
+//   sortBy: string;
+// };
+
 export const fetchSneakers = createAsyncThunk('sneakers/fetchSneakers', async ({ params }) => {
   const { search, sortBy } = params;
   const { data } = await axios.get(
@@ -8,6 +25,11 @@ export const fetchSneakers = createAsyncThunk('sneakers/fetchSneakers', async ({
   );
   return data;
 });
+
+// const initialState: Items = {
+//   items: [],
+//   status: '',
+// };
 
 const sneakersSlice = createSlice({
   name: 'sneakers',
@@ -22,14 +44,14 @@ const sneakersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSneakers.pending, (state, action) => {
+      .addCase(fetchSneakers.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchSneakers.fulfilled, (state, action) => {
         state.items = action.payload;
         state.status = 'success';
       })
-      .addCase(fetchSneakers.rejected, (state, action) => {
+      .addCase(fetchSneakers.rejected, (state) => {
         state.status = 'error';
       });
   },

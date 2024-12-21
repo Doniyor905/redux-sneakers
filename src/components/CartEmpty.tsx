@@ -1,8 +1,9 @@
-import { Link } from 'react-router';
 import cartEmpty from '../assets/images/cartEmpty.png';
 import Button from './Button';
-
-const CartEmpty = ({ setOpenDrawer }) => {
+type CartEmptyProps = {
+  setOpenDrawer: (el: boolean) => void;
+};
+const CartEmpty: React.FC<CartEmptyProps> = ({ setOpenDrawer }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <img src={cartEmpty} alt="" className="w-[120px]" />

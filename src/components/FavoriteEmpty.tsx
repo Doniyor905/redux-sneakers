@@ -1,8 +1,7 @@
-import React from 'react';
 import favoriteEmpty from '../assets/images/favoriteEmpty.png';
 import Button from './Button';
 import { Link } from 'react-router';
-const FavoriteEmpty = () => {
+const FavoriteEmpty: React.FC = () => {
   return (
     <div className="mt-[100px] flex items-center flex-col ">
       <img className="w-[70px] h-[70px]" src={favoriteEmpty} alt="" />

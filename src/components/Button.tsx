@@ -2,7 +2,13 @@ import classNames from 'classnames';
 import { ArrowLeft } from 'lucide-react';
 import React from 'react';
 
-const Button = ({ className, children, onClick }) => {
+type ButtonProps = {
+  className?: string;
+  children?: string;
+  onClick?: () => void;
+};
+
+const Button: React.FC<ButtonProps> = ({ className, children, onClick }) => {
   return (
     <div
       onClick={onClick}

@@ -1,5 +1,5 @@
 import imageHeader from '../assets/images/header-image.png';
-const HeaderSlider = () => {
+const HeaderSlider: React.FC = () => {
   return (
     <div className="hidden lg:h-[300px] lg:flex md:h-[247px] md:flex mb-8 bg-[#F4EFE9] rounded-xl mt-10 flex justify-between items-center">
       <div className="pl-10">

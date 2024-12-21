@@ -5,9 +5,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchCart } from '../redux/slices/cartSlice';
 import { fetchFavorites } from '../redux/slices/favoriteSlice';
+import { useAppDispatch } from '../hooks';
 
-const Home = () => {
-  const dispatch = useDispatch();
+const Home: React.FC = () => {
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     dispatch(fetchCart());

@@ -2,9 +2,13 @@ import { CircleUserRound, Heart, ShoppingCart } from 'lucide-react';
 import logo from '../assets/images/logo.png';
 import { Link } from 'react-router';
 import { useSelector } from 'react-redux';
-const Header = ({ setOpenDrawer }) => {
-  const totalPrice = useSelector((state) => state.cart.totalPrice);
-  console.log(totalPrice);
+
+type HeaderProps = {
+  setOpenDrawer: (el: boolean) => void;
+};
+
+const Header: React.FC<HeaderProps> = ({ setOpenDrawer }) => {
+  const totalPrice = useSelector((state: any) => state.cart.totalPrice);
   return (
     <div className="pb-10 flex flex-col mb-10 md:flex-row md:mb-0 items-center justify-between border-b-2 border-gray border-opacity-20">
       <Link to="/" className="flex gap-4 mb-4 md:mb-0 items-center">

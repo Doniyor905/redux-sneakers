@@ -1,13 +1,17 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import closeIcon from '../assets/images/closeIcon.svg';
 import { ArrowRight } from 'lucide-react';
 import { removeCart } from '../redux/slices/cartSlice';
-import CartEmpty from './CartEmpty'; 
-const Drawer = ({ setOpenDrawer }) => {
-  const addItems = useSelector((state) => state.cart.cartItems);
-  const totalPrice = useSelector((state) => state.cart.totalPrice);
-  const dispatch = useDispatch();
+import CartEmpty from './CartEmpty';
+import { useAppDispatch, useAppSelector } from '../hooks';
+
+type DrawerProps = {
+  setOpenDrawer: (el: boolean) => void;
+};
+
+const Drawer: React.FC<DrawerProps> = ({ setOpenDrawer }) => {
+  const { cartItems, totalPrice } = useAppSelector((state) => state.cart);
+  const dispatch = useAppDispatch();
 
   return (
     <div className="relative">
@@ -16,7 +20,7 @@ const Drawer = ({ setOpenDrawer }) => {
           className={
             'absolute p-3 right-0 top-0 w-[385px] bg-white h-screen flex flex-col justify-between'
           }>
-          {addItems.length === 0 ? (
+          {totalPrice == 0 ? (
             <CartEmpty setOpenDrawer={setOpenDrawer} />
           ) : (
             <div>
@@ -31,7 +35,7 @@ const Drawer = ({ setOpenDrawer }) => {
                   />
                 </div>
                 <div className="overflow-y-scroll h-[420px] mb-12">
-                  {addItems.map((item) => (
+                  {cartItems.map((item) => (
                     <div
                       key={item.id}
                       className="pl-3 pr-3 mb-3 flex justify-between items-center w-[325px] h-[119px] border-2 border-[#F3F3F3] rounded-[20px]">
@@ -41,7 +45,7 @@ const Drawer = ({ setOpenDrawer }) => {
                         <b className="text-sm font-bold">{item.price} руб.</b>
                       </div>
                       <img
-                        onClick={() => dispatch(removeCart(item))}
+                        onClick={() => dispatch(removeCart(item.id))}
                         className="cursor-pointer hover:opacity-60"
                         src={closeIcon}
                         alt=""

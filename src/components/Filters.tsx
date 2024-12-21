@@ -4,23 +4,26 @@ import { Search } from 'lucide-react';
 import { setSearchCard, setSortBy } from '../redux/slices/filtersSlice';
 import debounce from 'lodash.debounce';
 import React from 'react';
-const sortList = [
+import { useAppDispatch } from '../hooks';
+
+type sortItem = { name: string; value: string };
+const sortList: sortItem[] = [
   { name: 'По названию', value: '' },
   { name: 'По цене (дешевые)', value: '-price' },
   { name: 'По цене (дорогие)', value: 'price' },
 ];
-const Filters = () => {
+const Filters: React.FC = () => {
   const [value, setValue] = React.useState('');
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const updateSearch = React.useCallback(
-    debounce((str) => {
+    debounce((str: string) => {
       dispatch(setSearchCard(str));
     }, 250),
     [],
   );
 
-  const onChangeSearch = (event) => {
+  const onChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
     updateSearch(event.target.value);
   };

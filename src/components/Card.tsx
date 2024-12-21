@@ -7,32 +7,39 @@ import addIcon from '../assets/images/add.svg';
 import addedIcon from '../assets/images/added.svg';
 import likeIcon from '../assets/images/like.svg';
 import likedIcon from '../assets/images/liked.svg';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
-const Card = ({ id, title, price, imageUrl }) => {
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.cartItems);
-  const favoriteItems = useSelector((state) => state.favorite.favoriteItems);
+type CardProps = {
+  id: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+};
 
-  const isAddeda = cartItems.some((item) => item.title === title);
+const Card: React.FC<CardProps> = ({ id, title, price, imageUrl }) => {
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.cartItems);
+  const favoriteItems = useAppSelector((state) => state.favorite.favoriteItems) || [];
+
+  const isAdded = cartItems.some((item) => item.title === title);
   const isLiked = favoriteItems.some((item) => item.title === title);
-
   const toggleCart = () => {
     const items = {
       id,
       title,
       price,
       imageUrl,
-      isAdded: true,
     };
     const find = cartItems.find((item) => item.title === title);
+    console.log('find', find);
     if (find) {
-      dispatch(removeCart(find));
+      dispatch(removeCart(find.id));
     } else {
       dispatch(addToCart(items));
     }
   };
 
-  const onClickFavorite = (id) => {
+  const onClickFavorite = () => {
     const items = {
       id,
       title,
@@ -65,7 +72,7 @@ const Card = ({ id, title, price, imageUrl }) => {
           <img
             onClick={() => toggleCart()}
             className="cursor-pointer"
-            src={isAddeda ? addedIcon : addIcon}
+            src={isAdded ? addedIcon : addIcon}
             alt=""
           />
         </div>
