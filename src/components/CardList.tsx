@@ -10,6 +10,7 @@ const CardList = () => {
 
   const search = searchCard ? `title=*${searchCard}` : '';
   const dispatch = useDispatch();
+  
   React.useEffect(() => {
     const fetchAction = fetchSneakers as any;
     (dispatch as any)(

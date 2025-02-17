@@ -21,8 +21,8 @@ const Card: React.FC<CardProps> = ({ id, title, price, imageUrl }) => {
   const cartItems = useAppSelector((state) => state.cart.cartItems);
   const favoriteItems = useAppSelector((state) => state.favorite.favoriteItems) || [];
 
-  const isAdded = cartItems.some((item) => item.title === title);
-  const isLiked = favoriteItems.some((item) => item.title === title);
+  const isAdded = cartItems.some((item) => item.id === id);
+  const isLiked = favoriteItems.some((item) => item.id === id);
   const toggleCart = () => {
     const items = {
       id,
@@ -30,7 +30,7 @@ const Card: React.FC<CardProps> = ({ id, title, price, imageUrl }) => {
       price,
       imageUrl,
     };
-    const find = cartItems.find((item) => item.title === title);
+    const find = cartItems.find((item) => item.id === id);
     console.log('find', find);
     if (find) {
       dispatch(removeCart(find.id));
